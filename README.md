@@ -13,9 +13,9 @@ The application has the following structure:
 ├── requirements.txt
 ├── config.py (This is just a template)
 ├── templates
-│   ├── message_template.html
-│   ├── message_template.html
-│   └── message_template.html
+│   ├── example.html
+│   ├── movie.html
+│   └── series.html
 └── README.md
 ```
 
