@@ -1,45 +1,54 @@
-from flask import Flask, request
+import asyncio
 import json
-import requests
+from flask import Flask, request
+from jinja2 import Environment, FileSystemLoader
+from telegram import Bot
+from telegram.constants import ParseMode
 
 from config.config import Config
 
+async def send_to_tg(message):
+    bot = Bot(token=Config.TOKEN)
 
-def send_to_tg(message):
-    url = "https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={channel_id}&text={message}".format(
-        TOKEN=Config.TOKEN,
-        channel_id=Config.channel_id,
-        message=message
-    )
-
-    print(requests.get(url).json())
+    await bot.send_message(chat_id=Config.channel_id, text=message, parse_mode=ParseMode.HTML)
 
     return "OK"
 
 
 app = Flask(__name__)
 
+
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
 
-    # print(request.headers)
-    # print(request.data)
-    # print(request.form)
-
     data = json.loads(request.form["data"])
 
+    print(data)
+
+    env = Environment(loader=FileSystemLoader("templates"))
+
     if data["Event"] == "library.new":
+        if data["Item"]["Type"] == "Episode":
+            template = env.get_template("series.html")
+
+            html_message = template.render(**data)
+            asyncio.run(send_to_tg(html_message))
+
+        elif data["Item"]["Type"] == "Movie":
+            template = env.get_template("movie.html")
+
+            html_message = template.render(**data)
+            asyncio.run(send_to_tg(html_message))
+        
         return "OK"
 
     elif data["Event"] == "system.webhooktest":
+        data.update({"Item": {"ParentIndexNumber": 1, "IndexNumber": 3}})
 
-        message = 'Genres: {genres}\n\nChannel: {channel_id}\n\nhttps://www.imdb.com/title/tt13362962'.format(
-            genres="Comedy, Drama, Sport",
-            channel_id=Config.channel_id    
-        )
+        template = env.get_template("example.html")
 
-        # send_to_tg(message)
-        print(message)
+        html_message = template.render(**data)
+        asyncio.run(send_to_tg(html_message))
 
         return "OK"
 

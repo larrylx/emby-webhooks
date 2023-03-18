@@ -1,0 +1,15 @@
+#MovieRelease
+
+🎬 {{ Item.Name }}
+
+Genres: {% if Item.Genres %}#{{ Item.Genres|join(' #') }}{% endif %}
+
+Rating: {% if Item.CommunityRating %}⭐️{{Item.CommunityRating)}}{% endif %}
+
+File_size: {{"%.1f"|format(Item.Size/1024/1024/1024)}}GB
+
+Resolution: {{ Item.Width }} x {{ Item.Height }}
+
+IMDB: {{ Item.ExternalUrls[0].Url }}
+
+Channel: @SportEmbyUpdate
