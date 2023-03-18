@@ -2,16 +2,16 @@
 
 📺 {{ Item.SeriesName }}
 
-Season: {{ Item.ParentIndexNumber }} | Episode: {{ Item.IndexNumber }}
+Season: {% if Item.ParentIndexNumber %}{{ Item.ParentIndexNumber }}{% endif %} | Episode: {% if Item.IndexNumber %}{{ Item.IndexNumber }}{% endif %}
 
 Genres: {% if Item.Genres %}#{{ Item.Genres|join(' #') }}{% endif %}
 
 Rating: {% if Item.CommunityRating %}⭐️{{ Item.CommunityRating }}{% endif %}
 
-File_size: {{"%.1f"|format(Item.Size/1024/1024/1024)}}GB
+File_size: {% if Item.Size %}{{"%.1f"|format(Item.Size/1024/1024/1024)}}GB{% endif %}
 
-Resolution: {{ Item.Width }} x {{ Item.Height }}
+Resolution: {% if Item.Width %}{{ Item.Width }} x {{ Item.Height }}{% endif %}
 
-IMDB: {{ Item.ExternalUrls[0].Url }}
+IMDB: {% if Item.ExternalUrls[0] %}{{ Item.ExternalUrls[0].Url }}{% endif %}
 
 Channel: @SportEmbyUpdate

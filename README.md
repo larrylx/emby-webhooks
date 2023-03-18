@@ -11,7 +11,7 @@ The application has the following structure:
 │   └── config.py
 ├── Dockerfile
 ├── requirements.txt
-├── config.py (This is just a template)
+├── config_template.py (This is just a template)
 ├── templates
 │   ├── example.html
 │   ├── movie.html
